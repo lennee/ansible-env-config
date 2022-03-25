@@ -1,0 +1,26 @@
+---
+
+- name: Check for 'nvm' in System
+  command: which nvm
+  failed_when: false
+  changed_when: false
+  check_mode: false
+  register: nvm_command_result
+
+- name: Install nvm on System (Mac)
+  command: brew install nvm
+  when:
+    - nvm_command_result.rc == 1
+    - ansible_facts.os_family == "Darwin"
+
+- name: Source ZSH
+  shell: source `/Users/{{ ansible_user }}/.zshrc
+  when:
+    - nvm_command_result.rc == 1
+    - ansible_facts.os_family == "Darwin"
+
+- name: Install node and npm via nvm
+  shell: nvm install {{ nodejs_version }}
+
+- name: Install selenium globally via yarn
+  shell: yarn global add selenium-webdriver

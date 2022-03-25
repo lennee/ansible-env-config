@@ -1,0 +1,74 @@
+---
+- hosts: controller
+  become: false
+
+  pre_tasks:
+    - name: Load Configuration (with defaults from example file)
+      include_vars: "{{ item }}"
+      loop:
+        - config.yml
+
+    - name: Ensure apt cache is up to date.
+      apt:
+        update_cache: true
+        cache_valid_time: 3600
+      when:
+        - ansible_facts.os_family == "Debian"
+
+    - name: Ensure pacman cache is up to date
+      community.general.pacman:
+        update_cache: true
+      when:
+        - ansible_facts.os_family == "Archlinux"
+
+    - name: Ensure Homebrew is installed and up to date
+      community.general.homebrew:
+        update_homebrew: true
+      when:
+        - ansible_facts.os_family == "Darwin"
+
+
+  tasks:
+    - name: Setup Docker
+      import_tasks: tasks/dev_tools/docker.yml
+      when: docker_enabled
+
+    - name: Setup Python
+      import_tasks: tasks/dev_tools/python.yml
+      when: python_enabled
+
+    - name: Setup NodeJS
+      import_tasks: tasks/dev_tools/nodejs.yml
+      when: nodejs_enabled
+
+    - name: Setup ZSH
+      import_tasks: tasks/dev_tools/zsh.yml
+      when: zsh_enabled
+
+    - name: Setup Rust
+      import_tasks: tasks/dev_tools/rust.yml
+      when: rust_enabled
+
+    - name: Create Directories for work (Mac)
+      shell: mkDir '/Users/{{ ansible_user }}/{{ item }}'
+      with_items:
+        - Development
+        - Music Projects
+
+
+    - name: Install software to Computer (Mac)
+      shell: brew install {{ item }}
+      with_items:
+        - htop
+        - wget
+        #- --cask ableton-live-suite
+        - --cask balenaetcher
+        #- --cask firefox
+        - --cask postman
+        #- --cask slack
+        #- --cask spotify
+        - --cask via
+        - --cask chrysalis
+      when:
+        - ansible_facts.os_family == "Darwin"
+        #- install_software

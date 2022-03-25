@@ -1,0 +1,7 @@
+---
+
+- name: Install Rust via curl
+  shell: curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSfy | sh
+
+- name: Update Rust
+  shell: rustup update

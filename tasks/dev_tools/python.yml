@@ -1,0 +1,57 @@
+---
+
+- name: Check for 'pyenv' in System
+  command: which pyenv
+  failed_when: false
+  changed_when: false
+  check_mode: false
+  register: python_command_result
+
+- name: Install pyenv using homebrew
+  community.general.homebrew:
+    name: pyenv
+    state: present
+  when:
+   - python_command_result.rc == 1
+   - ansible_facts.os_family == "Darwin"
+
+- name: Install pyenv using apt
+  apt:
+    name: pyenv
+    state: present
+  when:
+   - python_command_result.rc == 1
+   - ansible_facts.os_family == "Debian"
+
+- name: Check current Python Version
+  shell: cut -d' ' -f2 <<< "$(python3 --version)"
+  register: current_python_version
+
+- name: Set Python Version to Config
+  command: pyenv install {{ python_version }}
+  when: current_python_version.stdout != python_version
+  ignore_errors: yes
+
+- name: Link the new Python version to bin
+  shell: |
+   unlink /usr/local/bin/python3 &&
+   ln -s ~/.pyenv/versions/{{ python_version }}/bin/python3 /usr/local/bin/python3
+  when: current_python_version.stdout != python_version
+
+- name: Uninstall old Python Version
+  command: pyenv uninstall {{ current_python_version.stdout }}
+  when: current_python_version.stdout != python_version
+
+
+- name: Update Pip to latest with Pip
+  command: python3 -m pip install --upgrade pip
+
+- name: Install core Python Packages
+  command: python3 -m pip install --upgrade {{ item }}
+  with_items:
+    - beautifulsoup4
+    - numpy
+    - pandas
+    - requests
+    - virtualenv
+
