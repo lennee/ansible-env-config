@@ -1,0 +1,25 @@
+---
+- name: Setup Pyenv
+
+- name: Check for 'pyenv' in System
+  command: which pyenv
+  failed_when: false
+  changed_when: false
+  check_mode: false
+  register: pyenv_command_result
+
+- name: Install pyenv using homebrew (MacOS)
+  community.general.homebrew:
+    name: pyenv
+    state: present
+  when:
+   - pyenv_command_result.rc == 1
+   - ansible_facts.os_family == "Darwin"
+
+- name: Install pyenv using apt (Debian)
+  apt:
+    name: pyenv
+    state: present
+  when:
+   - pyenv_command_result.rc == 1
+   - ansible_facts.os_family == "Debian"

@@ -1,0 +1,25 @@
+---
+
+  - name: Check for 'nvm' in System
+    command: which nvm
+    failed_when: false
+    changed_when: false
+    check_mode: false
+    register: nvm_command_result
+
+  - name: Install nvm on System (Mac)
+    shell: >
+      curl https://raw.githubusercontent.com/creationix/nvm/v0.7.0/install.sh | sh
+      creates=/Users/{{ ansible_user }}/.nvm/nvm.sh
+    when:
+      - nvm_command_result.rc == 1
+      - ansible_facts.os_family == "Darwin"
+
+    - name: Install nvm on System (Debian)
+      shell: >
+        curl https://raw.githubusercontent.com/creationix/nvm/v0.7.0/install.sh | sh
+        creates=/Users/{{ ansible_user }}/.nvm/nvm.sh
+      when:
+        - nvm_command_result.rc == 1
+        - ansible_facts.os_family == "Debian"
+
