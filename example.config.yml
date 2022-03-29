@@ -1,0 +1,22 @@
+ansible_user: tristansmith
+
+
+# Docker
+docker_enabled: false
+
+# Python
+python_enabled: false
+python_version: 3.10.3
+
+# NodeJs
+nodejs_enabled: true
+nodejs_version: 16
+
+# ZSH
+zsh_enabled: false
+
+# Rust
+rust_enabled: false
+
+# Install software
+install_software: false
