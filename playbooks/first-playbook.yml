@@ -1,4 +1,0 @@
----
-
-- name: Network Getting Started First Playbook
-  connection: annsible.netcommon.network_cli
