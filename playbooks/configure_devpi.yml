@@ -18,5 +18,8 @@
 
   tasks:
 
+    - name: Install and configure git
+      import_tasks: ../tasks/git.yml
+
     - name: Install oh-my-zsh and download .zshrc
       import_tasks: ../tasks/zsh.yml

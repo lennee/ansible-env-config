@@ -17,6 +17,9 @@
 
 
   tasks:
+    - name: Install and configure git
+      import_tasks: ../tasks/git.yml
+
     - name: Setup Docker
       import_tasks: tasks/dev_tools/docker.yml
       when: docker_enabled
