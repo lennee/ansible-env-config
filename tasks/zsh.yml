@@ -24,6 +24,6 @@
   when: ansible_facts.os_family == "Debian"
 
 - name: Pull down personal ~/.zshrc file.
-  uri: https://raw.github.com/lennee/environment-config/main/.zshrc
+  uri: https://raw.github.com/lennee/ansible-env-config/main/.zshrc
     dest: {{ ansible_home_directory }}/.zshrc
   when: ansible_facts.os_family == "Debian"
