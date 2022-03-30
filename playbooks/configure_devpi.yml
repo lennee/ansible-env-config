@@ -31,3 +31,18 @@
 
     - name: Setup Docker
       import_tasks: ../tasks/docker.yml
+
+    - name: Install Rust
+      import_tasks: ../tasks/rust.yml
+
+    - name: Setup Pyenv
+      import_tasks: ../tasks/pyenv.yml
+
+    - name: Setup Python
+      import_tasks: ../tasks/python.yml
+
+    - name: Setup nvm
+      import_tasks: ../tasks/nvm.yml
+
+    - name: Setup Node.js
+      import_tasks: ../tasks/nodejs.yml
