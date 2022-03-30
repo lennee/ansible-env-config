@@ -23,3 +23,11 @@
 
     - name: Install oh-my-zsh and download .zshrc
       import_tasks: ../tasks/zsh.yml
+
+    - name: Install vim
+      apt:
+        name: vim
+        state: present
+
+    - name: Setup Docker
+      import_tasks: ../tasks/docker.yml
