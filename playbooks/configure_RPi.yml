@@ -1,0 +1,48 @@
+---
+
+- name: Configuring RPis
+  hosts: raspberrypi
+  vars:
+    ansible_home_directory: /home/tristan
+
+  pre_tasks:
+    - name: Load Configuration (with defaults from example file)
+      include_vars: "{{ item }}"
+      loop:
+        - config.yml
+
+    - name: Ensure Apt is up to date
+      apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+  tasks:
+
+    - name: Install and configure git
+      import_tasks: ../tasks/git.yml
+
+    - name: Install oh-my-zsh and download .zshrc
+      import_tasks: ../tasks/zsh.yml
+
+    - name: Install vim
+      apt:
+        name: vim
+        state: present
+
+    - name: Setup Docker
+      import_tasks: ../tasks/docker.yml
+
+    - name: Install Rust
+      import_tasks: ../tasks/rust.yml
+
+    - name: Setup Pyenv
+      import_tasks: ../tasks/pyenv.yml
+
+    - name: Setup Python
+      import_tasks: ../tasks/python.yml
+
+    - name: Setup nvm
+      import_tasks: ../tasks/nvm.yml
+
+    - name: Setup Node.js
+      import_tasks: ../tasks/nodejs.yml
