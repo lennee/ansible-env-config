@@ -1,0 +1,25 @@
+---
+- name: Configure Tower
+  hosts: controller
+  become: false
+  vars:
+    ansible_home_directory: /home/tristan
+
+  pre_tasks:
+    - name: Load Configuration (with defaults from example file)
+      include_vars: "{{ item }}"
+      loop:
+        - config.yml
+
+    - name: Ensure system is up to date
+      community.general.apt:
+        update_cache: true
+        upgrade: true
+
+  tasks:
+    - name: Install and configure git
+      import_tasks: ../tasks/git.yml
+
+    - name: Install and configure cli tools
+      import_tasks: ../tasks/cli_tools.yml
+
