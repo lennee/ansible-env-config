@@ -14,8 +14,3 @@
   npm:
     name: yarn
     global: yes
-
-- name: Install selenium via yarn
-  yarn:
-    name: selenium-webdriver
-    global: yes
